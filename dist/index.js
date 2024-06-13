@@ -9861,26 +9861,19 @@ const run = async () => {
       // ログを表示する
       console.log("itemsWithoutIteration");
 
-      const itemsWithoutIteration = items;
+      const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
 
       await Promise.all(itemsWithoutIteration.map(item => {
-        // Condition: item status is "open" and created within the last week
         const createdDate = new Date(item.fields.created_at);
 
-        // statusを表示
-        console.log("item.fields.status", item.fields.status);
-
-        // if (item.fields.status === 'open') {
+        // createdAtが1週間以内ならcurrentIterationに移動
         if (createdDate >= oneWeekAgo) {
-            console.log("createdDate is new");
             return project.items.update(item.id, { iteration: currentIteration.title });
         } else {
-            console.log("createdDate is old");
             return project.items.update(item.id, { iteration: null }); // Unset the iteration
           }
-        // }
       }));
     }
   } catch (error) {
