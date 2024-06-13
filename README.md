@@ -81,6 +81,18 @@ Statuses of the issues that should _not_ be moved.
 
 ⚠️ _This setting takes precedence over `statuses`._ ⚠️
 
+#### auto-assign-current-iteration
+auto-assign-current-iteration is an option that automatically assigns Issues and Pull Requests (PRs) without a set iteration to the current iteration based on specific conditions. This feature helps streamline project management by reducing manual iteration assignments.
+
+- Type: boolean
+- Default Value: 'false'
+
+##### Conditions
+When auto-assign-current-iteration is enabled, the following conditions apply for automatically assigning Issues and PRs to the current iteration:
+
+- Unset Iteration: The item does not have an iteration set.
+- Created Within the Last Week: The item was created within the last week.
+
 ## Sources
 
 This action was made possible thanks to https://github.com/gr2m/github-project.
