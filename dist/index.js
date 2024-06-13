@@ -9858,20 +9858,23 @@ const run = async () => {
 
     // Automatically assign unset iteration to current iteration based on specific conditions
     if (autoAssignCurrentIteration) {
-      // ログを表示する
-      console.log("itemsWithoutIteration");
-
       const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
+
+      // itemsWithoutIterationの件数を取得して、ログに出す
+      console.log("itemsWithoutIteration length", itemsWithoutIteration.length);
+
       const oneWeekAgo = new Date();
-      oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
       await Promise.all(itemsWithoutIteration.map(item => {
         const createdDate = new Date(item.fields.created_at);
 
         // createdAtが1週間以内ならcurrentIterationに移動
         if (createdDate >= oneWeekAgo) {
+          console.log("add item.id", item.id);
             return project.items.update(item.id, { iteration: currentIteration.title });
         } else {
+          console.log("remove item.id", item.id);
             return project.items.update(item.id, { iteration: null }); // Unset the iteration
           }
       }));
