@@ -9865,10 +9865,10 @@ const run = async () => {
 
       const itemsToUpdate = items.filter(item => {
         if (!item.fields.iteration) {
-          
+
           console.log("item", item);
 
-          const createdDate = new Date(item.created_at);
+          const createdDate = new Date(item.createdAt);
           return createdDate >= oneWeekAgo;
         }
         return false;
@@ -9881,7 +9881,7 @@ const run = async () => {
     
       const itemsToUnset = items.filter(item => {
         if (!item.fields.iteration) {
-          const createdDate = new Date(item.created_at);
+          const createdDate = new Date(item.createdAt);
           console.log("item.id", item.id, "createdDate", createdDate);
           return createdDate < oneWeekAgo;
         }
