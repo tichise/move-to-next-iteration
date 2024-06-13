@@ -32,7 +32,7 @@ inputs:
   auto-assign-current-iteration:
     description: Automatically assign unset iteration to current iteration based on specific conditions.
     required: false
-    default: false
+    default: 'false'
 runs:
   using: 'node16'
   main: 'dist/index.js'
