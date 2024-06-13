@@ -9868,10 +9868,16 @@ const run = async () => {
       await Promise.all(itemsWithoutIteration.map(item => {
         // Condition: item status is "open" and created within the last week
         const createdDate = new Date(item.fields.created_at);
+
+        // statusを表示
+        console.log("item.fields.status", item.fields.status);
+
         // if (item.fields.status === 'open') {
-          if (createdDate >= oneWeekAgo) {
+        if (createdDate >= oneWeekAgo) {
+            console.log("createdDate is new");
             return project.items.update(item.id, { iteration: currentIteration.title });
-          } else {
+        } else {
+            console.log("createdDate is old");
             return project.items.update(item.id, { iteration: null }); // Unset the iteration
           }
         // }
