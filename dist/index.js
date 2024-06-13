@@ -9862,12 +9862,18 @@ const run = async () => {
       console.log("itemsWithoutIteration");
 
       const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
-      await Promise.all(itemsWithoutIteration.map(item => {
-        // Add any specific conditions here, e.g., labels, status, etc.
-        if (item.fields.status === 'open') {
-          console.log("item.fields.status");
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
 
-          return project.items.update(item.id, { iteration: currentIteration.title });
+      await Promise.all(itemsWithoutIteration.map(item => {
+        // Condition: item status is "open" and created within the last week
+        const createdDate = new Date(item.fields.created_at);
+        if (item.fields.status === 'open') {
+          if (createdDate >= oneWeekAgo) {
+            return project.items.update(item.id, { iteration: currentIteration.title });
+          } else {
+            return project.items.update(item.id, { iteration: null }); // Unset the iteration
+          }
         }
       }));
     }
