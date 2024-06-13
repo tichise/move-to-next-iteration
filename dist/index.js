@@ -9826,6 +9826,7 @@ const run = async () => {
     const statuses = core.getInput('statuses').split(',');
     const coreExclusedStatuses = core.getInput('excluded-statuses');
     const excludedStatuses = coreExclusedStatuses ? coreExclusedStatuses.split(',') : [];
+    const autoAssignCurrentIteration = core.getInput('auto-assign-current-iteration') === 'true';
 
     const project = new GitHubProject({ owner, number, token, fields: { iteration: iterationField } });
 
@@ -9854,6 +9855,17 @@ const run = async () => {
     });
 
     await Promise.all(filteredItems.map(item => project.items.update(item.id, { iteration: newIteration.title })));
+
+    // Automatically assign unset iteration to current iteration based on specific conditions
+    if (autoAssignCurrentIteration) {
+      const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
+      await Promise.all(itemsWithoutIteration.map(item => {
+        // Add any specific conditions here, e.g., labels, status, etc.
+        if (/* your conditions here */) {
+          return project.items.update(item.id, { iteration: currentIteration.title });
+        }
+      }));
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
