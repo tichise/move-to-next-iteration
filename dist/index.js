@@ -9861,7 +9861,7 @@ const run = async () => {
       // ログを表示する
       console.log("itemsWithoutIteration");
 
-      const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
+      const itemsWithoutIteration = items;
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
 
