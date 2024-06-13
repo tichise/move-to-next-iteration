@@ -9859,15 +9859,15 @@ const run = async () => {
     // Automatically assign unset iteration to current iteration based on specific conditions
     if (autoAssignCurrentIteration) {
       // ログを表示する
-      console.log("itemsWithoutIteration", itemsWithoutIteration);
+      console.log("itemsWithoutIteration");
 
       const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
       await Promise.all(itemsWithoutIteration.map(item => {
-        console.log("item", item);
+        console.log("item");
 
         // Add any specific conditions here, e.g., labels, status, etc.
         // if (item.fields.status === 'open') {
-          console.log("item.fields.status", item.fields.status);
+          console.log("item.fields.status");
 
           return project.items.update(item.id, { iteration: currentIteration.title });
         // }
