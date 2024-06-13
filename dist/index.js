@@ -9875,7 +9875,7 @@ const run = async () => {
         return project.items.update(item.id, { iteration: currentIteration.title });
       }));
 
-      /*
+    
       const itemsToUnset = items.filter(item => {
         if (!item.fields.iteration) {
           const createdDate = new Date(item.created_at);
@@ -9885,6 +9885,11 @@ const run = async () => {
         return false;
       });
 
+      console.log("itemsToUpdate length", itemsToUpdate.length);
+      console.log("itemsToUnset length", itemsToUnset.length);
+
+
+      /*
       await Promise.all(itemsToUnset.map(item => {
         console.log("remove item.id", item.id);
         return project.items.update(item.id, { iteration: null }); // Unset the iteration
