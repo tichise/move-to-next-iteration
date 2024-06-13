@@ -29,6 +29,10 @@ inputs:
   excluded-statuses:
     description: Statuses of the issues that should not be moved. This setting takes precedence over statuses.
     required: false
+  auto-assign-current-iteration:
+    description: Automatically assign unset iteration to current iteration based on specific conditions.
+    required: false
+    default: 'false'
 runs:
   using: 'node16'
   main: 'dist/index.js'

@@ -8637,6 +8637,8 @@ function projectItemNodeToGitHubProjectItem(state, itemNode) {
   return {
     type: itemNode.type,
     id: itemNode.id,
+    createdAt: itemNode.createdAt,
+    closedAt: itemNode.closedAt,
     isArchived: itemNode.isArchived,
     fields,
     content: {},
@@ -9826,6 +9828,7 @@ const run = async () => {
     const statuses = core.getInput('statuses').split(',');
     const coreExclusedStatuses = core.getInput('excluded-statuses');
     const excludedStatuses = coreExclusedStatuses ? coreExclusedStatuses.split(',') : [];
+    const autoAssignCurrentIteration = core.getInput('auto-assign-current-iteration') === 'true';
 
     const project = new GitHubProject({ owner, number, token, fields: { iteration: iterationField } });
 
@@ -9854,6 +9857,49 @@ const run = async () => {
     });
 
     await Promise.all(filteredItems.map(item => project.items.update(item.id, { iteration: newIteration.title })));
+
+    if (autoAssignCurrentIteration) {
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
+      // console.log("oneWeekAgo", oneWeekAgo);
+
+      const itemsToUpdate = items.filter(item => {
+        if (!item.fields.iteration) {
+
+          // console.log("item", item);
+
+          const createdDate = new Date(item.createdAt);
+          return createdDate >= oneWeekAgo;
+        }
+        return false;
+      });
+
+      await Promise.all(itemsToUpdate.map(item => {
+        return project.items.update(item.id, { iteration: currentIteration.title });
+      }));
+
+    
+      const itemsToUnset = items.filter(item => {
+        if (!item.fields.iteration) {
+          const createdDate = new Date(item.createdAt);
+          return createdDate < oneWeekAgo;
+        }
+        return false;
+      });
+
+      console.log("itemsToUpdate length", itemsToUpdate.length);
+      console.log("itemsToUnset length", itemsToUnset.length);
+
+
+      /*
+      await Promise.all(itemsToUnset.map(item => {
+        console.log("remove item.id", item.id);
+        return project.items.update(item.id, { iteration: null }); // Unset the iteration
+      }));
+      */
+    }
+
+    
   } catch (error) {
     core.setFailed(error.message);
   }
