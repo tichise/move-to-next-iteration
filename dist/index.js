@@ -8637,6 +8637,9 @@ function projectItemNodeToGitHubProjectItem(state, itemNode) {
   return {
     type: itemNode.type,
     id: itemNode.id,
+    createdAt: itemNode.createdAt,
+    closedAt: itemNode.closedAt,
+    repository: itemNode.repository.name,
     isArchived: itemNode.isArchived,
     fields,
     content: {},
