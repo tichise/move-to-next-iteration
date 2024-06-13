@@ -9861,12 +9861,12 @@ const run = async () => {
     if (autoAssignCurrentIteration) {
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
-      console.log("oneWeekAgo", oneWeekAgo);
+      // console.log("oneWeekAgo", oneWeekAgo);
 
       const itemsToUpdate = items.filter(item => {
         if (!item.fields.iteration) {
 
-          console.log("item", item);
+          // console.log("item", item);
 
           const createdDate = new Date(item.createdAt);
           return createdDate >= oneWeekAgo;
@@ -9882,7 +9882,6 @@ const run = async () => {
       const itemsToUnset = items.filter(item => {
         if (!item.fields.iteration) {
           const createdDate = new Date(item.createdAt);
-          console.log("item.id", item.id, "createdDate", createdDate);
           return createdDate < oneWeekAgo;
         }
         return false;
