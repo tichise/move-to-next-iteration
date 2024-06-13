@@ -9858,32 +9858,41 @@ const run = async () => {
 
     await Promise.all(filteredItems.map(item => project.items.update(item.id, { iteration: newIteration.title })));
 
-    // Automatically assign unset iteration to current iteration based on specific conditions
     if (autoAssignCurrentIteration) {
-      const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
-
-      // itemsWithoutIterationの件数を取得して、ログに出す
-      console.log("itemsWithoutIteration length", itemsWithoutIteration.length);
-
       const oneWeekAgo = new Date();
-      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
+      console.log("oneWeekAgo", oneWeekAgo);
 
-      await Promise.all(itemsWithoutIteration.map(item => {
-        const createdDate = new Date(item.fields.created_at);
+      const itemsToUpdate = items.filter(item => {
+        if (!item.fields.iteration) {
+          const createdDate = new Date(item.created_at);
+          return createdDate >= oneWeekAgo;
+        }
+        return false;
+      });
 
-        // itemの要素をログに一覧で出力する
-        console.log("item", item);
-
-        // createdAtが1週間以内ならcurrentIterationに移動
-        if (createdDate >= oneWeekAgo) {
-          console.log("add item.id", item.id);
-            return project.items.update(item.id, { iteration: currentIteration.title });
-        } else {
-          console.log("remove item.id", item.id);
-            return project.items.update(item.id, { iteration: null }); // Unset the iteration
-          }
+      await Promise.all(itemsToUpdate.map(item => {
+        return project.items.update(item.id, { iteration: currentIteration.title });
       }));
+
+      /*
+      const itemsToUnset = items.filter(item => {
+        if (!item.fields.iteration) {
+          const createdDate = new Date(item.created_at);
+          console.log("item.id", item.id, "createdDate", createdDate);
+          return createdDate < oneWeekAgo;
+        }
+        return false;
+      });
+
+      await Promise.all(itemsToUnset.map(item => {
+        console.log("remove item.id", item.id);
+        return project.items.update(item.id, { iteration: null }); // Unset the iteration
+      }));
+      */
     }
+
+    
   } catch (error) {
     core.setFailed(error.message);
   }
