@@ -9869,8 +9869,8 @@ const run = async () => {
       await Promise.all(itemsWithoutIteration.map(item => {
         const createdDate = new Date(item.fields.created_at);
 
-        // item.fieldsの中のプロパティ名一覧を取得してログに表示する
-        console.log("item.fields", Object.keys(item.fields));
+        // ログを表示する
+        console.log("item.fields.created_at", item.fields.created_at);
 
         // createdAtが1週間以内ならcurrentIterationに移動
         if (createdDate >= oneWeekAgo) {
