@@ -9860,7 +9860,7 @@ const run = async () => {
 
     if (autoAssignCurrentIteration) {
       const oneWeekAgo = new Date();
-      oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       // console.log("oneWeekAgo", oneWeekAgo);
 
       const itemsToUpdate = items.filter(item => {
