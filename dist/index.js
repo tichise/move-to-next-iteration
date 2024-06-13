@@ -9865,6 +9865,9 @@ const run = async () => {
 
       const itemsToUpdate = items.filter(item => {
         if (!item.fields.iteration) {
+          
+          console.log("item", item);
+
           const createdDate = new Date(item.created_at);
           return createdDate >= oneWeekAgo;
         }
