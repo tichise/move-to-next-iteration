@@ -9861,7 +9861,7 @@ const run = async () => {
       const itemsWithoutIteration = items.filter(item => !item.fields.iteration);
       await Promise.all(itemsWithoutIteration.map(item => {
         // Add any specific conditions here, e.g., labels, status, etc.
-        if (/* your conditions here */) {
+        if (item.fields.status === 'open') {
           return project.items.update(item.id, { iteration: currentIteration.title });
         }
       }));
